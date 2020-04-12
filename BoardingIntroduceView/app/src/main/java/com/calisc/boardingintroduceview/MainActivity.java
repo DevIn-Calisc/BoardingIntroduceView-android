@@ -1,16 +1,25 @@
 package com.calisc.boardingintroduceview;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import com.calisc.boardingintroduceview.Example.BlankFragment;
+import com.calisc.boardingintroduceview.Fragment.BoardFragment;
+import com.calisc.boardingintroduceview.Models.BoardModel;
+import com.calisc.boardingintroduceview.listeners.PaperBoardingOnRightOutListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +38,39 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        BoardFragment fragment = BoardFragment.newInstance(exampleData());
+        final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
+
+        fragment.setmOnRightOutListener(new PaperBoardingOnRightOutListener() {
+            @Override
+            public void onRightOut() {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                Fragment bg = new BlankFragment();
+                fragmentTransaction.replace(R.id.fragment_container, bg);
+                fragmentTransaction.commit();
+            }
+        });
+
+    }
+
+    private ArrayList<BoardModel> exampleData() {
+        ArrayList<BoardModel> data = new ArrayList<>();
+
+        BoardModel item1 = new BoardModel("Hotels","desc1", Color.parseColor("#678FB4"), R.drawable.hotels, R.drawable.key);
+
+        BoardModel item2 = new BoardModel("Hotels","desc1", Color.parseColor("#678FB4"), R.drawable.hotels, R.drawable.key);
+
+        BoardModel item3 = new BoardModel("Hotels","desc1", Color.parseColor("#678FB4"), R.drawable.hotels, R.drawable.key);
+
+        data.add(item1);
+        data.add(item2);
+        data.add(item3);
+
+
+        return data;
     }
 
     @Override
